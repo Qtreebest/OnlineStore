@@ -1,10 +1,13 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.Article.Article;
 import org.skypro.skyshop.basket.ProductBasket;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.search.SearchEngine;
+import org.skypro.skyshop.search.Searchable;
 
 public class App {
     public static void main(String[] args) {
@@ -39,5 +42,38 @@ public class App {
 
         System.out.println(basket.sumPrices());
         System.out.println(basket.searchProductBasket("Milk"));
+        SearchEngine engine = new SearchEngine(20);
+        engine.add(new SimpleProduct("Телефон", 100));
+        engine.add(apple);
+        engine.add(new FixPriceProduct("Ноутбук"));
+        engine.add(new Article("Java", "Язык програмирования которому мы учимся"));
+        engine.add(new Article("Компьютер", "Я учусь и учу язык Java на ноутбуке, и иногда смотю уроки с телефона"));
+        Searchable[] restult1 = engine.search("Java");
+        Searchable[] restult2 = engine.search("Тел");
+        Searchable[] restult3 = engine.search("ноут");
+        System.out.println("Поиск: Java");
+        for (Searchable s : engine.search("Java")) {
+            if (s != null) {
+                System.out.println(s.getStringRepresentation());
+            }
+        }
+        System.out.println("Поиск: Ноут");
+        for (Searchable s : engine.search("Ноут")) {
+            if (s != null) {
+                System.out.println(s.getStringRepresentation());
+            }
+        }
+        System.out.println("Поиск: Тел");
+        for (Searchable s : restult2) {
+            if (s != null) {
+                System.out.println(s.getStringRepresentation());
+            }
+        }
+        System.out.println("Поиск: App");
+        for (Searchable s : engine.search("App")) {
+            if (s != null) {
+                System.out.println(s.getStringRepresentation());
+            }
+        }
     }
 }
