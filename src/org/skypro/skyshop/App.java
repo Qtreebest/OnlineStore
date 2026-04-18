@@ -6,6 +6,7 @@ import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.search.BestResultNotFound;
 import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
 
@@ -51,6 +52,11 @@ public class App {
         Searchable[] restult1 = engine.search("Java");
         Searchable[] restult2 = engine.search("Тел");
         Searchable[] restult3 = engine.search("ноут");
+        try {
+            Product p = new SimpleProduct("", 100);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("Поиск: Java");
         for (Searchable s : engine.search("Java")) {
             if (s != null) {
@@ -74,6 +80,19 @@ public class App {
             if (s != null) {
                 System.out.println(s.getStringRepresentation());
             }
+        }
+
+        try {
+            Searchable result = engine.findBestMatch("Java");
+            System.out.println("Найдено: " + result.getStringRepresentation());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+        try {
+            Searchable result = engine.findBestMatch("Холодильник");
+            System.out.println("Найдено: " + result.getStringRepresentation());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка: " + e.getMessage());
         }
     }
 }
