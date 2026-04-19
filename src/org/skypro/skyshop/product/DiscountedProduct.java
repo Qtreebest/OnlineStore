@@ -1,5 +1,7 @@
 package org.skypro.skyshop.product;
 
+import javax.xml.namespace.QName;
+
 public class DiscountedProduct extends Product {
     private int basePrice;
     private float discount;

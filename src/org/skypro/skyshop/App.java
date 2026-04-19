@@ -10,76 +10,92 @@ import org.skypro.skyshop.search.BestResultNotFound;
 import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
 
+import java.util.List;
+
 public class App {
     public static void main(String[] args) {
         ProductBasket basket = new ProductBasket();
 
-        Product milk = new SimpleProduct("Milk", 123);
-        Product bread = new DiscountedProduct("Bread", 300, 10);
-        Product apple = new FixPriceProduct("Apple");
-        Product cheese = new SimpleProduct("Cheese", 234);
-        Product juice = new DiscountedProduct("Juice", 200, 20);
-        Product tea = new SimpleProduct("Tea", 352);
-        Product lime = new DiscountedProduct("lime", 200, 20);
-
-        basket.addProdukt(milk);
-        basket.addProdukt(bread);
-        basket.addProdukt(apple);
-        basket.addProdukt(cheese);
-        basket.addProdukt(juice);
-
-        basket.addProdukt(tea); // корзина переполнена
+        basket.addProdukt(new SimpleProduct("Молоко", 123));
+        basket.addProdukt(new DiscountedProduct("Хлеб", 300, 10));
+        basket.addProdukt(new FixPriceProduct("Яблоко"));
+        basket.addProdukt(new SimpleProduct("Сыр", 234));
+        basket.addProdukt(new DiscountedProduct("Сок", 200, 20));
+        basket.addProdukt(new SimpleProduct("Чай", 352));
+        basket.addProdukt(new DiscountedProduct("Лайм", 200, 20));
 
         basket.printBasket();
-
         System.out.println(basket.sumPrices());
 
-        System.out.println(basket.searchProductBasket("Milk"));
-        System.out.println(basket.searchProductBasket("Cola"));
+        List<Product> removed = basket.removeByName("Чай");
+
+        for (Product product : removed) {
+            System.out.println("Удален: " + product);
+        }
+        System.out.println("\n" + "печатаем содержимое корзины" + "\n");
+        basket.printBasket();
+
+        List<Product> removed2 = basket.removeByName("Коклюш");
+        if (removed2.isEmpty()) {
+            System.out.println("Список пустой");
+        } else {
+            for (Product product : removed2) {
+                System.out.println("Удален: " + product);
+            }
+        }
+
+
+        System.out.println(basket.searchProductBasket("Молоко"));
+        System.out.println(basket.searchProductBasket("Кола"));
 
         basket.cleanBasket();
 
         basket.printBasket();
 
         System.out.println(basket.sumPrices());
-        System.out.println(basket.searchProductBasket("Milk"));
-        SearchEngine engine = new SearchEngine(20);
+        System.out.println(basket.searchProductBasket("Молоко"));
+
+        SearchEngine engine = new SearchEngine();
         engine.add(new SimpleProduct("Телефон", 100));
-        engine.add(apple);
         engine.add(new FixPriceProduct("Ноутбук"));
         engine.add(new Article("Java", "Язык програмирования которому мы учимся"));
         engine.add(new Article("Компьютер", "Я учусь и учу язык Java на ноутбуке, и иногда смотю уроки с телефона"));
-        Searchable[] restult1 = engine.search("Java");
-        Searchable[] restult2 = engine.search("Тел");
-        Searchable[] restult3 = engine.search("ноут");
+        List<Searchable> result1 = engine.search("Java");
+        List<Searchable> result2 = engine.search("Тел");
+        List<Searchable> result3 = engine.search("ноут");
         try {
             Product p = new SimpleProduct("", 100);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
         System.out.println("Поиск: Java");
-        for (Searchable s : engine.search("Java")) {
-            if (s != null) {
+        if (result2.isEmpty()) {
+            System.out.println("Ничего не найдено");
+        } else {
+            for (Searchable s : result1) {
                 System.out.println(s.getStringRepresentation());
             }
         }
         System.out.println("Поиск: Ноут");
-        for (Searchable s : engine.search("Ноут")) {
-            if (s != null) {
+        if (result3.isEmpty()) {
+            System.out.println("Ничего не найдено");
+        } else {
+            for (Searchable s : result3) {
                 System.out.println(s.getStringRepresentation());
             }
         }
         System.out.println("Поиск: Тел");
-        for (Searchable s : restult2) {
-            if (s != null) {
+        if (result2.isEmpty()) {
+            System.out.println("Ничего не найдено");
+        } else {
+            for (Searchable s : result2) {
                 System.out.println(s.getStringRepresentation());
             }
         }
+
         System.out.println("Поиск: App");
         for (Searchable s : engine.search("App")) {
-            if (s != null) {
-                System.out.println(s.getStringRepresentation());
-            }
+            System.out.println(s.getStringRepresentation());
         }
 
         try {
