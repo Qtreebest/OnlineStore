@@ -1,26 +1,27 @@
 package org.skypro.skyshop.basket;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import org.skypro.skyshop.product.Product;
 
 
 public class ProductBasket {
-    private List<Product> baskets = new LinkedList<>();
+    private Map <String, List<Product>> baskets = new HashMap();
 
 
     public void addProdukt(Product basket) {
-        baskets.add(basket);
+        baskets
+                .computeIfAbsent(basket.getName(), k-> new LinkedList<>())
+                .add(basket);
     }
 
 
     public int sumPrices() {
         int summ = 0;
-        for (Product e : baskets) {
-            summ += e.getPrice();
+        for (List<Product> list : baskets.values()) {
+            for (Product e: list) {
+                summ += e.getPrice();
+            }
         }
         return summ;
     }
@@ -33,10 +34,12 @@ public class ProductBasket {
 
         int specialCount = 0;
 
-        for (Product product : baskets) {
-            System.out.println(product);
-            if (product.isSpecial()) {
-                specialCount++;
+        for (List<Product> list : baskets.values()) {
+            for (Product product : list) {
+                System.out.println(product);
+                if (product.isSpecial()) {
+                    specialCount++;
+                }
             }
         }
 
@@ -46,13 +49,7 @@ public class ProductBasket {
 
 
     public boolean searchProductBasket(String name) {
-        for (Product e : baskets) {
-            if (e.getName().equals(name)) {
-                return true;
-            }
-
-        }
-        return false;
+        return baskets.containsKey(name);
     }
 
     public void cleanBasket() {
@@ -60,19 +57,12 @@ public class ProductBasket {
     }
 
     public List<Product> removeByName(String name) {
-        List<Product> removedProducts = new ArrayList<>();
+        List<Product> removed = baskets.remove(name);
 
-        Iterator<Product> iterator = baskets.iterator();
-
-        while (iterator.hasNext()) {
-            Product product = iterator.next();
-
-            if (product.getName().equals(name)) {
-                removedProducts.add(product);
-                iterator.remove();
-            }
+        if (removed == null) {
+            return new LinkedList<>();
         }
-        return removedProducts;
+        return removed;
     }
 }
 
