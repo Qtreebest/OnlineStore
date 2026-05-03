@@ -6,25 +6,28 @@ import java.util.TreeSet;
 import java.util.Comparator;
 
 
-public class SearchEngine{
+public class SearchEngine {
+
     private Set<Searchable> items = new HashSet<>();
 
     public void add(Searchable item) {
         items.add(item);
     }
 
-    public Set<Searchable> search (String query) {
+    public Set<Searchable> search(String query) {
         Set<Searchable> result = new TreeSet<>(new Comparator<Searchable>() {
             @Override
             public int compare(Searchable o1, Searchable o2) {
-                int lengthCompare = Integer.compare(
-                        o2.getSearchTerm().length(),
-                        o1.getSearchTerm().length()
-                );
+                String name1 = o1.getName();
+                String name2 = o2.getName();
+
+                int lengthCompare = Integer.compare(name2.length(), name1.length());
+
                 if (lengthCompare != 0) {
                     return lengthCompare;
                 }
-                return o1.getSearchTerm().compareTo(o2.getSearchTerm());
+
+                return name1.compareTo(name2);
             }
         });
         for (Searchable item : items) {
@@ -35,30 +38,31 @@ public class SearchEngine{
         return result;
     }
 
-    public Searchable findBestMatch(String search) throws BestResultNotFound {
-        Searchable best = null;
-        int maxCount = 0;
+        public Searchable findBestMatch (String search) throws BestResultNotFound {
+            Searchable best = null;
+            int maxCount = 0;
 
-        for (Searchable item : items) {
-            String text = item.getSearchTerm();
+            for (Searchable item : items) {
+                String text = item.getSearchTerm();
 
-            int count = 0;
-            int index = 0;
+                int count = 0;
+                int index = 0;
 
-            int fountIndex = text.indexOf(search, index);
-            while (fountIndex != -1) {
-                count++;
-                index = fountIndex + search.length();
-                fountIndex = text.indexOf(search, index);
+                int fountIndex = text.indexOf(search, index);
+                while (fountIndex != -1) {
+                    count++;
+                    index = fountIndex + search.length();
+                    fountIndex = text.indexOf(search, index);
+                }
+                if (count > maxCount) {
+                    maxCount = count;
+                    best = item;
+                }
             }
-            if (count > maxCount) {
-                maxCount = count;
-                best = item;
+            if (best == null) {
+                throw new BestResultNotFound("Не найдено для: " + search);
             }
+            return best;
         }
-        if (best == null) {
-            throw new BestResultNotFound("Не найдено для: " + search);
-        }
-        return best;
     }
-}
+
