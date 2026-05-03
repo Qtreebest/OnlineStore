@@ -12,6 +12,7 @@ import org.skypro.skyshop.search.Searchable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class App {
     public static void main(String[] args) {
@@ -61,10 +62,10 @@ public class App {
         engine.add(new FixPriceProduct("Ноутбук"));
         engine.add(new Article("Java", "Язык програмирования которому мы учимся"));
         engine.add(new Article("Компьютер", "Я учусь и учу язык Java на ноутбуке, и иногда смотю уроки с телефона"));
-        Map<String, Searchable> result1 = engine.search("Java");
-        Map<String, Searchable> result2 = engine.search("Тел");
-        Map<String, Searchable> result3 = engine.search("ноут");
-        Map<String, Searchable> result4 = engine.search("App");
+        Set<Searchable> result1 = engine.search("Java");
+        Set<Searchable> result2 = engine.search("Тел");
+        Set<Searchable> result3 = engine.search("ноут");
+        Set<Searchable> result4 = engine.search("App");
 
         try {
             Product p = new SimpleProduct("", 100);
@@ -75,7 +76,7 @@ public class App {
         if (result1.isEmpty()) {
             System.out.println("Ничего не найдено");
         } else {
-            for (Searchable s : result1.values()) {
+            for (Searchable s : result1) {
                 System.out.println(s.getStringRepresentation());
             }
         }
@@ -83,7 +84,7 @@ public class App {
         if (result3.isEmpty()) {
             System.out.println("Ничего не найдено");
         } else {
-            for (Searchable s : result3.values()) {
+            for (Searchable s : result3) {
                 System.out.println(s.getStringRepresentation());
             }
         }
@@ -91,7 +92,7 @@ public class App {
         if (result2.isEmpty()) {
             System.out.println("Ничего не найдено");
         } else {
-            for (Searchable s : result2.values()) {
+            for (Searchable s : result2) {
                 System.out.println(s.getStringRepresentation());
             }
         }
@@ -100,7 +101,7 @@ public class App {
         if (result4.isEmpty()) {
             System.out.println("Ничего не найдено");
         } else {
-            for (Searchable s : result4.values()) {
+            for (Searchable s : result4) {
                 System.out.println(s.getStringRepresentation());
             }
         }
