@@ -11,6 +11,7 @@ import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
 
 import java.util.List;
+import java.util.Map;
 
 public class App {
     public static void main(String[] args) {
@@ -60,19 +61,21 @@ public class App {
         engine.add(new FixPriceProduct("Ноутбук"));
         engine.add(new Article("Java", "Язык програмирования которому мы учимся"));
         engine.add(new Article("Компьютер", "Я учусь и учу язык Java на ноутбуке, и иногда смотю уроки с телефона"));
-        List<Searchable> result1 = engine.search("Java");
-        List<Searchable> result2 = engine.search("Тел");
-        List<Searchable> result3 = engine.search("ноут");
+        Map<String, Searchable> result1 = engine.search("Java");
+        Map<String, Searchable> result2 = engine.search("Тел");
+        Map<String, Searchable> result3 = engine.search("ноут");
+        Map<String, Searchable> result4 = engine.search("App");
+
         try {
             Product p = new SimpleProduct("", 100);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
         System.out.println("Поиск: Java");
-        if (result2.isEmpty()) {
+        if (result1.isEmpty()) {
             System.out.println("Ничего не найдено");
         } else {
-            for (Searchable s : result1) {
+            for (Searchable s : result1.values()) {
                 System.out.println(s.getStringRepresentation());
             }
         }
@@ -80,7 +83,7 @@ public class App {
         if (result3.isEmpty()) {
             System.out.println("Ничего не найдено");
         } else {
-            for (Searchable s : result3) {
+            for (Searchable s : result3.values()) {
                 System.out.println(s.getStringRepresentation());
             }
         }
@@ -88,14 +91,18 @@ public class App {
         if (result2.isEmpty()) {
             System.out.println("Ничего не найдено");
         } else {
-            for (Searchable s : result2) {
+            for (Searchable s : result2.values()) {
                 System.out.println(s.getStringRepresentation());
             }
         }
 
         System.out.println("Поиск: App");
-        for (Searchable s : engine.search("App")) {
-            System.out.println(s.getStringRepresentation());
+        if (result4.isEmpty()) {
+            System.out.println("Ничего не найдено");
+        } else {
+            for (Searchable s : result4.values()) {
+                System.out.println(s.getStringRepresentation());
+            }
         }
 
         try {
